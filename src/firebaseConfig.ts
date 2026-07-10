@@ -2,13 +2,13 @@
 // プロジェクトを作成し、ウェブアプリの構成情報をここに貼り付けてください。
 // 手順は README.md を参照。
 export const firebaseConfig = {
-  apiKey: "PASTE_YOUR_API_KEY",
-  authDomain: "PASTE_YOUR_AUTH_DOMAIN",
-  databaseURL: "PASTE_YOUR_DATABASE_URL",
-  projectId: "PASTE_YOUR_PROJECT_ID",
-  storageBucket: "PASTE_YOUR_STORAGE_BUCKET",
-  messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID",
-  appId: "PASTE_YOUR_APP_ID",
+  apiKey: "AIzaSyDcwONK9F93k4FSBLz1gVW_7YikccmeWzQ",
+  authDomain: "poker-b7235.firebaseapp.com",
+  databaseURL: "https://poker-b7235-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "poker-b7235",
+  storageBucket: "poker-b7235.firebasestorage.app",
+  messagingSenderId: "560474708602",
+  appId: "1:560474708602:web:6c3eec9ef7a47f883179c3",
 };
 
 export const isConfigured = !Object.values(firebaseConfig).some((v) =>
