@@ -1,6 +1,12 @@
 import { useState } from "react";
 import type { Room } from "../types";
-import { PHASE_INSTRUCTIONS, PHASE_LABELS, totalPot } from "../lib/poker";
+import {
+  PHASE_INSTRUCTIONS,
+  PHASE_LABELS,
+  getPositions,
+  positionStyle,
+  totalPot,
+} from "../lib/poker";
 import { useGameSounds } from "../lib/useGameSounds";
 import { avatarGradient } from "../lib/ui";
 import ActionBar from "./ActionBar";
@@ -55,6 +61,7 @@ export default function GameTable({ room, playerId, onLeave }: Props) {
     hand.participants.length > 0 ? hand.participants : room.playerOrder;
   // 参加していないプレイヤー(バースト・途中参加)も一覧の下に出す
   const spectators = room.playerOrder.filter((id) => !displayOrder.includes(id));
+  const positions = getPositions(hand);
 
   return (
     <div className="space-y-4 pb-44">
@@ -112,20 +119,21 @@ export default function GameTable({ room, playerId, onLeave }: Props) {
                 style={{ background: avatarGradient(id) }}
               >
                 {p.name.charAt(0)}
-                {id === hand.dealerId && (
-                  <span className="chip-badge absolute -right-1.5 -top-1.5 border-slate-400 bg-white text-slate-900">
-                    D
+                {positions[id] === "BTN" && (
+                  <span className="chip-badge absolute -right-1.5 -top-1.5 border-amber-400 bg-amber-500 text-slate-950">
+                    BTN
                   </span>
                 )}
               </span>
               <div className="min-w-0 flex-1">
                 <p className="flex items-center gap-1.5">
                   <span className="truncate font-bold">{p.name}</span>
-                  {id === hand.sbId && (
-                    <span className="chip-badge bg-sky-600">SB</span>
-                  )}
-                  {id === hand.bbId && (
-                    <span className="chip-badge bg-indigo-600">BB</span>
+                  {positions[id] && positions[id] !== "BTN" && (
+                    <span
+                      className={`chip-badge ${positionStyle(positions[id])}`}
+                    >
+                      {positions[id]}
+                    </span>
                   )}
                   {id === playerId && (
                     <span className="flex-none rounded-full bg-sky-900/60 px-1.5 py-0.5 text-[10px] font-bold text-sky-300">

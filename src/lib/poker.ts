@@ -426,6 +426,78 @@ export const PHASE_LABELS: Record<Phase, string> = {
   complete: "ハンド終了",
 };
 
+/**
+ * 各プレイヤーのテーブルポジションを返す。
+ * BTN→SB→BB→UTG→…→CO の順。ヘッズアップでは BTN=SB。
+ */
+export function getPositions(hand: HandState): Record<string, string> {
+  const p = hand.participants;
+  const n = p.length;
+  const pos: Record<string, string> = {};
+
+  if (n <= 1) return pos;
+
+  // ヘッズアップ: ディーラー=BTN(=SB)、もう1人がBB
+  if (n === 2) {
+    pos[hand.dealerId] = "BTN";
+    pos[hand.bbId] = "BB";
+    return pos;
+  }
+
+  pos[hand.dealerId] = "BTN";
+  pos[hand.sbId] = "SB";
+  pos[hand.bbId] = "BB";
+
+  // BB の次の席から BTN の手前までがミドル〜レイトポジション
+  const bbIdx = p.indexOf(hand.bbId);
+  const middle: string[] = [];
+  for (let i = 1; i < n; i++) {
+    const id = p[(bbIdx + i) % n];
+    if (id === hand.dealerId || id === hand.sbId) break;
+    middle.push(id);
+  }
+
+  if (middle.length === 1) {
+    pos[middle[0]] = "UTG";
+  } else if (middle.length === 2) {
+    pos[middle[0]] = "UTG";
+    pos[middle[1]] = "CO";
+  } else if (middle.length === 3) {
+    pos[middle[0]] = "UTG";
+    pos[middle[1]] = "MP";
+    pos[middle[2]] = "CO";
+  } else if (middle.length === 4) {
+    pos[middle[0]] = "UTG";
+    pos[middle[1]] = "UTG+1";
+    pos[middle[2]] = "HJ";
+    pos[middle[3]] = "CO";
+  } else if (middle.length >= 5) {
+    pos[middle[0]] = "UTG";
+    for (let i = 1; i < middle.length - 2; i++) {
+      pos[middle[i]] = `UTG+${i}`;
+    }
+    pos[middle[middle.length - 2]] = "HJ";
+    pos[middle[middle.length - 1]] = "CO";
+  }
+
+  return pos;
+}
+
+const POSITION_STYLE: Record<string, string> = {
+  BTN: "border-amber-400 bg-amber-500 text-slate-950",
+  SB: "bg-sky-600",
+  BB: "bg-indigo-600",
+  UTG: "bg-rose-600",
+  "UTG+1": "bg-rose-700",
+  CO: "bg-purple-600",
+  HJ: "bg-purple-700",
+  MP: "bg-slate-600",
+};
+
+export function positionStyle(pos: string): string {
+  return POSITION_STYLE[pos] ?? "bg-slate-600";
+}
+
 export const PHASE_INSTRUCTIONS: Record<Phase, string> = {
   preflop: "各プレイヤーに手札を2枚ずつ配ってください",
   flop: "場にフロップ(3枚)を出してください",
