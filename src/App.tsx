@@ -8,6 +8,7 @@ import Lobby from "./components/Lobby";
 import WaitingRoom from "./components/WaitingRoom";
 import GameTable from "./components/GameTable";
 import SoundToggles from "./components/SoundToggles";
+import HelpModal from "./components/HelpModal";
 import { unlock } from "./lib/sound";
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
   );
   const [room, setRoom] = useState<Room | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
   const playerId = isConfigured ? getPlayerId() : "";
 
   useEffect(() => {
@@ -57,6 +59,14 @@ export default function App() {
   return (
     <div className="bg-app min-h-screen text-slate-100">
       <SoundToggles />
+      <button
+        aria-label="ヘルプ"
+        className="fixed left-3 top-3 z-50 flex h-9 w-9 items-center justify-center rounded-full border border-amber-500/50 bg-amber-900/60 text-base backdrop-blur transition active:scale-90"
+        onClick={() => setShowHelp(true)}
+      >
+        📖
+      </button>
+      {showHelp && <HelpModal onClose={() => setShowHelp(false)} />}
       <div className="mx-auto max-w-xl px-4 py-6">
         {!roomCode ? (
           <Lobby playerId={playerId} onEnterRoom={enterRoom} />

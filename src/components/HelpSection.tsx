@@ -47,6 +47,19 @@ const TERMS: { term: string; desc: string }[] = [
   },
 ];
 
+export function HelpTerms() {
+  return (
+    <div className="space-y-3">
+      {TERMS.map((t) => (
+        <div key={t.term}>
+          <p className="text-sm font-bold text-amber-400">{t.term}</p>
+          <p className="text-xs leading-relaxed text-slate-400">{t.desc}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function HelpSection() {
   const [open, setOpen] = useState(false);
 
@@ -64,13 +77,8 @@ export default function HelpSection() {
         </span>
       </button>
       {open && (
-        <div className="animate-fade-up space-y-2 border-t border-white/5 px-4 pb-4 pt-3">
-          {TERMS.map((t) => (
-            <div key={t.term}>
-              <p className="text-sm font-bold text-amber-400">{t.term}</p>
-              <p className="text-xs leading-relaxed text-slate-400">{t.desc}</p>
-            </div>
-          ))}
+        <div className="animate-fade-up border-t border-white/5 px-4 pb-4 pt-3">
+          <HelpTerms />
         </div>
       )}
     </div>
