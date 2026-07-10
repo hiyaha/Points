@@ -7,6 +7,8 @@ import SetupScreen from "./components/SetupScreen";
 import Lobby from "./components/Lobby";
 import WaitingRoom from "./components/WaitingRoom";
 import GameTable from "./components/GameTable";
+import SoundToggles from "./components/SoundToggles";
+import { unlock } from "./lib/sound";
 
 export default function App() {
   const [roomCode, setRoomCode] = useState<string | null>(() =>
@@ -15,6 +17,12 @@ export default function App() {
   const [room, setRoom] = useState<Room | null>(null);
   const [loading, setLoading] = useState(false);
   const playerId = isConfigured ? getPlayerId() : "";
+
+  useEffect(() => {
+    // ブラウザの自動再生制限があるため、最初のタップで音声を有効化する
+    window.addEventListener("pointerdown", unlock);
+    return () => window.removeEventListener("pointerdown", unlock);
+  }, []);
 
   useEffect(() => {
     if (!roomCode) {
@@ -48,6 +56,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100">
+      <SoundToggles />
       <div className="mx-auto max-w-xl px-4 py-6">
         {!roomCode ? (
           <Lobby playerId={playerId} onEnterRoom={enterRoom} />

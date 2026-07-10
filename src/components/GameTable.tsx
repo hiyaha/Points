@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Room } from "../types";
 import { PHASE_INSTRUCTIONS, PHASE_LABELS, totalPot } from "../lib/poker";
+import { useGameSounds } from "../lib/useGameSounds";
 import ActionBar from "./ActionBar";
 import ShowdownPanel from "./ShowdownPanel";
 import ResultPanel from "./ResultPanel";
@@ -13,6 +14,7 @@ interface Props {
 
 export default function GameTable({ room, playerId, onLeave }: Props) {
   const [error, setError] = useState<string | null>(null);
+  useGameSounds(room, playerId);
   const hand = room.hand;
   const isHost = room.hostId === playerId;
 
