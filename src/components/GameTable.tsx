@@ -20,6 +20,20 @@ interface Props {
   onLeave: () => void;
 }
 
+function seatPositions(
+  count: number,
+): { x: number; y: number; align: string }[] {
+  const RX = 46;
+  const RY = 42;
+  return Array.from({ length: count }, (_, i) => {
+    const t = i / count;
+    const x = 50 + RX * Math.sin(2 * Math.PI * t);
+    const y = 50 + RY * Math.cos(2 * Math.PI * t);
+    const align = x < 35 ? "right" : x > 65 ? "left" : "center";
+    return { x, y, align };
+  });
+}
+
 export default function GameTable({ room, playerId, onLeave }: Props) {
   const [error, setError] = useState<string | null>(null);
   useGameSounds(room, playerId);
@@ -59,12 +73,21 @@ export default function GameTable({ room, playerId, onLeave }: Props) {
 
   const displayOrder =
     hand.participants.length > 0 ? hand.participants : room.playerOrder;
-  // 参加していないプレイヤー(バースト・途中参加)も一覧の下に出す
-  const spectators = room.playerOrder.filter((id) => !displayOrder.includes(id));
+  const spectators = room.playerOrder.filter(
+    (id) => !displayOrder.includes(id),
+  );
   const positions = getPositions(hand);
 
+  // 自分を手前(index 0 = テーブル下部)に回転
+  const myIdx = displayOrder.indexOf(playerId);
+  const rotated =
+    myIdx >= 0
+      ? [...displayOrder.slice(myIdx), ...displayOrder.slice(0, myIdx)]
+      : displayOrder;
+  const seats = seatPositions(rotated.length);
+
   return (
-    <div className="space-y-4 pb-44">
+    <div className="space-y-3 pb-44">
       <header className="flex items-center justify-between pr-24">
         <div className="flex items-center gap-2 text-sm text-slate-400">
           <span className="panel tnum rounded-lg px-2.5 py-1 font-bold tracking-widest">
@@ -77,125 +100,137 @@ export default function GameTable({ room, playerId, onLeave }: Props) {
         </button>
       </header>
 
-      <div className="felt rounded-[2rem] border border-emerald-950/80 px-4 py-6 text-center">
-        <p className="text-xs font-bold tracking-widest text-emerald-300/90 uppercase">
-          {PHASE_LABELS[hand.phase]}
-        </p>
-        <p className="mt-1 text-4xl font-black drop-shadow-lg">
-          <span className="text-gold tnum">{totalPot(hand)}</span>
-        </p>
-        <p className="text-xs font-bold tracking-wider text-emerald-200/70">
-          POT
-        </p>
-        {PHASE_INSTRUCTIONS[hand.phase] && (
-          <p className="mx-auto mt-3 max-w-xs rounded-full bg-black/25 px-4 py-1.5 text-xs text-emerald-100/90">
-            🃏 {PHASE_INSTRUCTIONS[hand.phase]}
-          </p>
-        )}
-        <p className="mt-2 text-[11px] text-emerald-200/50">
-          SB {room.settings.smallBlind} / BB {room.settings.bigBlind}
-        </p>
+      {/* テーブル */}
+      <div
+        className="relative mx-auto w-full"
+        style={{ paddingBottom: "90%" }}
+      >
+        <div className="absolute inset-0">
+          {/* フェルト(中央の楕円テーブル) */}
+          <div className="felt absolute left-[15%] right-[15%] top-[20%] bottom-[20%] rounded-[50%] border border-emerald-950/80">
+            <div className="flex h-full flex-col items-center justify-center text-center">
+              <p className="text-[10px] font-bold tracking-widest text-emerald-300/90 uppercase">
+                {PHASE_LABELS[hand.phase]}
+              </p>
+              <p className="text-3xl font-black drop-shadow-lg">
+                <span className="text-gold tnum">{totalPot(hand)}</span>
+              </p>
+              <p className="text-[10px] font-bold tracking-wider text-emerald-200/70">
+                POT
+              </p>
+              {PHASE_INSTRUCTIONS[hand.phase] && (
+                <p className="mx-3 mt-2 rounded-full bg-black/25 px-3 py-1 text-[10px] leading-tight text-emerald-100/90">
+                  🃏 {PHASE_INSTRUCTIONS[hand.phase]}
+                </p>
+              )}
+              <p className="mt-1 text-[10px] text-emerald-200/50">
+                SB {room.settings.smallBlind} / BB {room.settings.bigBlind}
+              </p>
+            </div>
+          </div>
+
+          {/* プレイヤー席 */}
+          {rotated.map((id, i) => {
+            const p = room.players[id];
+            if (!p) return null;
+            const seat = seats[i];
+            const isActing = hand.actingId === id;
+            const folded = !!hand.folded[id];
+            const allIn = !!hand.allIn[id];
+            const bet = hand.bets[id] ?? 0;
+            const isMe = id === playerId;
+            const pos = positions[id];
+
+            return (
+              <div
+                key={id}
+                className="absolute -translate-x-1/2 -translate-y-1/2"
+                style={{ left: `${seat.x}%`, top: `${seat.y}%` }}
+              >
+                <div
+                  className={`flex flex-col items-center transition-all duration-300 ${
+                    folded ? "opacity-30 saturate-0" : ""
+                  }`}
+                >
+                  {/* アバター */}
+                  <div className="relative">
+                    <span
+                      className={`flex h-11 w-11 items-center justify-center rounded-full text-sm font-black shadow-lg ring-2 ${
+                        isActing
+                          ? "animate-glow ring-amber-400"
+                          : isMe
+                            ? "ring-sky-400"
+                            : "ring-transparent"
+                      }`}
+                      style={{ background: avatarGradient(id) }}
+                    >
+                      {p.name.charAt(0)}
+                    </span>
+                    {pos && (
+                      <span
+                        className={`absolute -right-2 -top-1 rounded-full px-1 py-0.5 text-[8px] font-black leading-none ${
+                          pos === "BTN"
+                            ? "border border-amber-400 bg-amber-500 text-slate-950"
+                            : positionStyle(pos)
+                        } ${pos !== "BTN" ? "text-white" : ""}`}
+                      >
+                        {pos}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* 名前 */}
+                  <p
+                    className={`mt-0.5 max-w-[4.5rem] truncate text-center text-[11px] font-bold ${
+                      isMe ? "text-sky-300" : "text-slate-200"
+                    }`}
+                  >
+                    {isMe ? "あなた" : p.name}
+                  </p>
+
+                  {/* チップ */}
+                  <p className="tnum text-xs font-black">{p.chips}</p>
+
+                  {/* ステータス */}
+                  <p className="h-4 text-center text-[10px]">
+                    {folded ? (
+                      <span className="text-slate-500">フォールド</span>
+                    ) : allIn ? (
+                      <span className="font-bold text-rose-400">
+                        ALL IN
+                      </span>
+                    ) : bet > 0 ? (
+                      <span className="tnum text-emerald-300">
+                        <span className="chip-icon mr-0.5" />
+                        {bet}
+                      </span>
+                    ) : isActing ? (
+                      <span className="animate-bounce-soft inline-block text-amber-300">
+                        考え中
+                      </span>
+                    ) : null}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
-      <ul className="space-y-2">
-        {displayOrder.map((id) => {
-          const p = room.players[id];
-          if (!p) return null;
-          const isActing = hand.actingId === id;
-          const folded = !!hand.folded[id];
-          const allIn = !!hand.allIn[id];
-          const bet = hand.bets[id] ?? 0;
-          return (
-            <li
-              key={id}
-              className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 transition-all duration-300 ${
-                isActing
-                  ? "animate-glow bg-amber-950/50 ring-2 ring-amber-400"
-                  : "panel"
-              } ${folded ? "opacity-35 saturate-0" : ""}`}
-            >
-              <span
-                className="relative flex h-10 w-10 flex-none items-center justify-center rounded-full text-sm font-black shadow-lg"
-                style={{ background: avatarGradient(id) }}
-              >
-                {p.name.charAt(0)}
-                {positions[id] === "BTN" && (
-                  <span className="chip-badge absolute -right-1.5 -top-1.5 border-amber-400 bg-amber-500 text-slate-950">
-                    BTN
-                  </span>
-                )}
+      {/* 観戦者 */}
+      {spectators.length > 0 && (
+        <div className="flex flex-wrap justify-center gap-2 text-xs text-slate-500">
+          {spectators.map((id) => {
+            const p = room.players[id];
+            if (!p) return null;
+            return (
+              <span key={id} className="rounded-full bg-slate-950/30 px-2 py-1">
+                {p.name} ({p.chips > 0 ? "次ハンドから" : "バースト"})
               </span>
-              <div className="min-w-0 flex-1">
-                <p className="flex items-center gap-1.5">
-                  <span className="truncate font-bold">{p.name}</span>
-                  {positions[id] && positions[id] !== "BTN" && (
-                    <span
-                      className={`chip-badge ${positionStyle(positions[id])}`}
-                    >
-                      {positions[id]}
-                    </span>
-                  )}
-                  {id === playerId && (
-                    <span className="flex-none rounded-full bg-sky-900/60 px-1.5 py-0.5 text-[10px] font-bold text-sky-300">
-                      あなた
-                    </span>
-                  )}
-                </p>
-                <p className="mt-0.5 text-xs">
-                  {folded ? (
-                    <span className="text-slate-500">フォールド</span>
-                  ) : allIn ? (
-                    <span className="font-bold text-rose-400">
-                      オールイン!
-                    </span>
-                  ) : bet > 0 ? (
-                    <span className="text-emerald-300">
-                      <span className="chip-icon mr-1" />
-                      ベット <span className="tnum font-bold">{bet}</span>
-                    </span>
-                  ) : isActing ? (
-                    <span className="animate-bounce-soft inline-block text-amber-300">
-                      考え中...
-                    </span>
-                  ) : (
-                    <span className="text-transparent">-</span>
-                  )}
-                </p>
-              </div>
-              <p className="tnum text-right text-lg font-black">
-                {p.chips}
-                <span className="block text-[10px] font-normal text-slate-500">
-                  チップ
-                </span>
-              </p>
-            </li>
-          );
-        })}
-        {spectators.map((id) => {
-          const p = room.players[id];
-          if (!p) return null;
-          return (
-            <li
-              key={id}
-              className="flex items-center justify-between rounded-2xl bg-slate-950/30 px-3 py-2 text-slate-500"
-            >
-              <span className="flex items-center gap-2">
-                <span
-                  className="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold opacity-50"
-                  style={{ background: avatarGradient(id) }}
-                >
-                  {p.name.charAt(0)}
-                </span>
-                {p.name}
-                <span className="text-xs">
-                  {p.chips > 0 ? "次ハンドから参加" : "バースト"}
-                </span>
-              </span>
-              <span className="tnum">{p.chips}</span>
-            </li>
-          );
-        })}
-      </ul>
+            );
+          })}
+        </div>
+      )}
 
       {hand.phase === "showdown" && (
         <ShowdownPanel room={room} playerId={playerId} onError={setError} />
