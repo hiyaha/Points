@@ -201,6 +201,26 @@ export function sendUpdateBlinds(
   });
 }
 
+/** 席順の変更(ホストのみ、ロビーのみ) */
+export function sendReorderPlayers(
+  code: string,
+  byId: string,
+  newOrder: string[],
+): Promise<string | null> {
+  return withRoom(code, (room) => {
+    if (room.hostId !== byId) return "ホストのみ操作できます";
+    if (room.status !== "lobby") return "ゲーム開始後は変更できません";
+    if (
+      newOrder.length !== room.playerOrder.length ||
+      !room.playerOrder.every((id) => newOrder.includes(id))
+    ) {
+      return "プレイヤーの一覧が一致しません";
+    }
+    room.playerOrder = newOrder;
+    return null;
+  });
+}
+
 /** ルームの解散(ホストのみ) */
 export async function deleteRoom(code: string, byId: string): Promise<string | null> {
   const snapshot = await get(roomRef(code));
