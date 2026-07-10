@@ -6,6 +6,7 @@ import { avatarGradient } from "../lib/ui";
 import ActionBar from "./ActionBar";
 import ShowdownPanel from "./ShowdownPanel";
 import ResultPanel from "./ResultPanel";
+import GameOverPanel from "./GameOverPanel";
 
 interface Props {
   room: Room;
@@ -18,6 +19,29 @@ export default function GameTable({ room, playerId, onLeave }: Props) {
   useGameSounds(room, playerId);
   const hand = room.hand;
   const isHost = room.hostId === playerId;
+
+  const alive = room.playerOrder.filter(
+    (id) => (room.players[id]?.chips ?? 0) > 0,
+  );
+  const isGameOver = hand?.phase === "complete" && alive.length <= 1;
+
+  if (isGameOver) {
+    return (
+      <div className="space-y-4 pb-8">
+        <GameOverPanel
+          room={room}
+          playerId={playerId}
+          onLeave={onLeave}
+          onError={setError}
+        />
+        {error && (
+          <p className="animate-fade-up rounded-xl border border-red-500/30 bg-red-950/60 px-4 py-3 text-sm text-red-300">
+            {error}
+          </p>
+        )}
+      </div>
+    );
+  }
 
   if (!hand) {
     return (

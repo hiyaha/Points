@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { getSavedName, saveName } from "../lib/id";
 import { createRoom, joinRoom } from "../lib/room";
+import HelpSection from "./HelpSection";
 
 interface Props {
   playerId: string;
@@ -118,39 +119,44 @@ export default function Lobby({ playerId, onEnterRoom }: Props) {
 
       {mode === "create" ? (
         <div className="animate-fade-up space-y-4">
-          <div className="panel grid grid-cols-3 gap-3 rounded-2xl p-4">
-            <div>
-              <label className="mb-1 block text-xs text-slate-400">
-                初期チップ
-              </label>
-              <input
-                type="number"
-                className="tnum w-full rounded-xl border border-white/10 bg-slate-950/60 px-2 py-2.5 outline-none transition focus:border-emerald-500/60"
-                value={initialChips}
-                min={1}
-                onChange={(e) => setInitialChips(Number(e.target.value))}
-              />
+          <div className="panel rounded-2xl p-4">
+            <div className="grid grid-cols-3 gap-3">
+              <div>
+                <label className="mb-1 block text-xs text-slate-400">
+                  初期チップ
+                </label>
+                <input
+                  type="number"
+                  className="tnum w-full rounded-xl border border-white/10 bg-slate-950/60 px-2 py-2.5 outline-none transition focus:border-emerald-500/60"
+                  value={initialChips}
+                  min={1}
+                  onChange={(e) => setInitialChips(Number(e.target.value))}
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs text-slate-400">SB(小)</label>
+                <input
+                  type="number"
+                  className="tnum w-full rounded-xl border border-white/10 bg-slate-950/60 px-2 py-2.5 outline-none transition focus:border-emerald-500/60"
+                  value={smallBlind}
+                  min={1}
+                  onChange={(e) => setSmallBlind(Number(e.target.value))}
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs text-slate-400">BB(大)</label>
+                <input
+                  type="number"
+                  className="tnum w-full rounded-xl border border-white/10 bg-slate-950/60 px-2 py-2.5 outline-none transition focus:border-emerald-500/60"
+                  value={bigBlind}
+                  min={1}
+                  onChange={(e) => setBigBlind(Number(e.target.value))}
+                />
+              </div>
             </div>
-            <div>
-              <label className="mb-1 block text-xs text-slate-400">SB(小)</label>
-              <input
-                type="number"
-                className="tnum w-full rounded-xl border border-white/10 bg-slate-950/60 px-2 py-2.5 outline-none transition focus:border-emerald-500/60"
-                value={smallBlind}
-                min={1}
-                onChange={(e) => setSmallBlind(Number(e.target.value))}
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-xs text-slate-400">BB(大)</label>
-              <input
-                type="number"
-                className="tnum w-full rounded-xl border border-white/10 bg-slate-950/60 px-2 py-2.5 outline-none transition focus:border-emerald-500/60"
-                value={bigBlind}
-                min={1}
-                onChange={(e) => setBigBlind(Number(e.target.value))}
-              />
-            </div>
+            <p className="mt-3 text-xs leading-relaxed text-slate-500">
+              各プレイヤーに配られる初期チップと、毎ハンド強制ベットされるブラインド額を設定します。SB(スモールブラインド)はBB(ビッグブラインド)の半額が一般的です。
+            </p>
           </div>
           <button
             className="w-full rounded-2xl bg-gradient-to-b from-emerald-500 to-emerald-700 py-4 text-lg font-black shadow-lg shadow-emerald-900/50 transition active:scale-[0.98] disabled:opacity-50"
@@ -189,6 +195,8 @@ export default function Lobby({ playerId, onEnterRoom }: Props) {
           {error}
         </p>
       )}
+
+      <HelpSection />
     </div>
   );
 }

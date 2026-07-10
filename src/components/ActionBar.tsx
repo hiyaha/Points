@@ -104,6 +104,9 @@ export default function ActionBar({ room, playerId, onError }: Props) {
               onClick={() => act({ type: "fold" })}
             >
               フォールド
+              <span className="block text-[10px] font-normal text-slate-400">
+                降りる
+              </span>
             </button>
             {toCall > 0 ? (
               <button
@@ -112,9 +115,13 @@ export default function ActionBar({ room, playerId, onError }: Props) {
                 onClick={() => act({ type: "call" })}
               >
                 <span className="tnum">コール {callAmount}</span>
-                {callAmount >= me.chips && (
+                {callAmount >= me.chips ? (
                   <span className="block text-xs font-normal">
                     (オールイン)
+                  </span>
+                ) : (
+                  <span className="block text-[10px] font-normal text-sky-200">
+                    同額で続ける
                   </span>
                 )}
               </button>
@@ -125,6 +132,9 @@ export default function ActionBar({ room, playerId, onError }: Props) {
                 onClick={() => act({ type: "check" })}
               >
                 チェック
+                <span className="block text-[10px] font-normal text-sky-200">
+                  パスする
+                </span>
               </button>
             )}
             {raiseAllowed ? (
@@ -137,6 +147,9 @@ export default function ActionBar({ room, playerId, onError }: Props) {
                 }}
               >
                 {hand.currentBet > 0 ? "レイズ" : "ベット"}
+                <span className="block text-[10px] font-normal text-rose-200">
+                  上乗せする
+                </span>
               </button>
             ) : (
               <button

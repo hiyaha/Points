@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Room } from "../types";
 import { deleteRoom, startGame } from "../lib/room";
 import { avatarGradient } from "../lib/ui";
+import HelpSection from "./HelpSection";
 
 interface Props {
   room: Room;
@@ -134,6 +135,8 @@ export default function WaitingRoom({ room, playerId, onLeave }: Props) {
           ホストの開始を待っています...
         </p>
       )}
+
+      <HelpSection />
 
       <button className="w-full py-2 text-sm text-slate-500" onClick={onLeave}>
         退出する(データは残ります)
