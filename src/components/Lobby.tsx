@@ -67,26 +67,27 @@ export default function Lobby({ playerId, onEnterRoom }: Props) {
   return (
     <div className="animate-fade-up space-y-6 pt-8">
       <header className="text-center">
-        <p className="mb-1 text-2xl tracking-[0.4em]">
-          <span className="text-slate-200">♠</span>
-          <span className="text-red-500">♥</span>
-          <span className="text-red-500">♦</span>
-          <span className="text-slate-200">♣</span>
+        <p className="mb-2 text-3xl tracking-[0.5em]">
+          <span className="drop-shadow-[0_0_6px_rgba(255,255,255,0.15)]">♠</span>
+          <span className="text-red-500 drop-shadow-[0_0_6px_rgba(239,68,68,0.3)]">♥</span>
+          <span className="text-red-500 drop-shadow-[0_0_6px_rgba(239,68,68,0.3)]">♦</span>
+          <span className="drop-shadow-[0_0_6px_rgba(255,255,255,0.15)]">♣</span>
         </p>
         <h1 className="text-gold text-3xl font-black tracking-wide">
           ポーカーチップカウンター
         </h1>
-        <p className="mt-2 text-sm text-slate-400">
+        <div className="divider-gold mx-auto mt-3 w-32" />
+        <p className="mt-3 text-sm text-stone-400">
           テキサスホールデム用のチップ管理アプリ
         </p>
       </header>
 
       <div className="panel rounded-2xl p-5">
-        <label className="mb-1.5 block text-sm font-medium text-slate-300">
+        <label className="mb-1.5 block text-sm font-semibold text-stone-300">
           あなたの名前
         </label>
         <input
-          className="w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 py-3 outline-none transition focus:border-emerald-500/60 focus:ring-2 focus:ring-emerald-500/20"
+          className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-stone-100 outline-none transition placeholder:text-stone-600 focus:border-amber-500/40 focus:ring-2 focus:ring-amber-500/15"
           value={name}
           maxLength={12}
           onChange={(e) => setName(e.target.value)}
@@ -94,12 +95,12 @@ export default function Lobby({ playerId, onEnterRoom }: Props) {
         />
       </div>
 
-      <div className="flex overflow-hidden rounded-xl border border-white/10 bg-slate-950/40 p-1">
+      <div className="flex overflow-hidden rounded-xl border border-white/10 bg-black/20 p-1">
         <button
           className={`flex-1 rounded-lg py-2.5 text-sm font-bold transition ${
             mode === "create"
-              ? "bg-gradient-to-b from-emerald-500 to-emerald-700 shadow-lg"
-              : "text-slate-400"
+              ? "btn-primary text-white shadow-lg"
+              : "text-stone-500 hover:text-stone-300"
           }`}
           onClick={() => setMode("create")}
         >
@@ -108,8 +109,8 @@ export default function Lobby({ playerId, onEnterRoom }: Props) {
         <button
           className={`flex-1 rounded-lg py-2.5 text-sm font-bold transition ${
             mode === "join"
-              ? "bg-gradient-to-b from-emerald-500 to-emerald-700 shadow-lg"
-              : "text-slate-400"
+              ? "btn-primary text-white shadow-lg"
+              : "text-stone-500 hover:text-stone-300"
           }`}
           onClick={() => setMode("join")}
         >
@@ -122,44 +123,48 @@ export default function Lobby({ playerId, onEnterRoom }: Props) {
           <div className="panel rounded-2xl p-4">
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <label className="mb-1 block text-xs text-slate-400">
+                <label className="mb-1 block text-xs font-semibold text-stone-400">
                   初期チップ
                 </label>
                 <input
                   type="number"
-                  className="tnum w-full rounded-xl border border-white/10 bg-slate-950/60 px-2 py-2.5 outline-none transition focus:border-emerald-500/60"
+                  className="tnum w-full rounded-xl border border-white/10 bg-black/30 px-2 py-2.5 text-stone-100 outline-none transition focus:border-amber-500/40"
                   value={initialChips}
                   min={1}
                   onChange={(e) => setInitialChips(Number(e.target.value))}
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs text-slate-400">SB(小)</label>
+                <label className="mb-1 block text-xs font-semibold text-stone-400">
+                  SB(小)
+                </label>
                 <input
                   type="number"
-                  className="tnum w-full rounded-xl border border-white/10 bg-slate-950/60 px-2 py-2.5 outline-none transition focus:border-emerald-500/60"
+                  className="tnum w-full rounded-xl border border-white/10 bg-black/30 px-2 py-2.5 text-stone-100 outline-none transition focus:border-amber-500/40"
                   value={smallBlind}
                   min={1}
                   onChange={(e) => setSmallBlind(Number(e.target.value))}
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs text-slate-400">BB(大)</label>
+                <label className="mb-1 block text-xs font-semibold text-stone-400">
+                  BB(大)
+                </label>
                 <input
                   type="number"
-                  className="tnum w-full rounded-xl border border-white/10 bg-slate-950/60 px-2 py-2.5 outline-none transition focus:border-emerald-500/60"
+                  className="tnum w-full rounded-xl border border-white/10 bg-black/30 px-2 py-2.5 text-stone-100 outline-none transition focus:border-amber-500/40"
                   value={bigBlind}
                   min={1}
                   onChange={(e) => setBigBlind(Number(e.target.value))}
                 />
               </div>
             </div>
-            <p className="mt-3 text-xs leading-relaxed text-slate-500">
+            <p className="mt-3 text-xs leading-relaxed text-stone-500">
               各プレイヤーに配られる初期チップと、毎ハンド強制ベットされるブラインド額を設定します。SB(スモールブラインド)はBB(ビッグブラインド)の半額が一般的です。
             </p>
           </div>
           <button
-            className="w-full rounded-2xl bg-gradient-to-b from-emerald-500 to-emerald-700 py-4 text-lg font-black shadow-lg shadow-emerald-900/50 transition active:scale-[0.98] disabled:opacity-50"
+            className="btn-primary w-full rounded-2xl py-4 text-lg font-black text-white disabled:opacity-50"
             disabled={busy}
             onClick={handleCreate}
           >
@@ -169,11 +174,11 @@ export default function Lobby({ playerId, onEnterRoom }: Props) {
       ) : (
         <div className="animate-fade-up space-y-4">
           <div className="panel rounded-2xl p-4">
-            <label className="mb-1.5 block text-sm font-medium text-slate-300">
+            <label className="mb-1.5 block text-sm font-semibold text-stone-300">
               ルームコード
             </label>
             <input
-              className="tnum w-full rounded-xl border border-white/10 bg-slate-950/60 px-3 py-3 text-center text-2xl font-bold tracking-[0.35em] uppercase outline-none transition focus:border-emerald-500/60"
+              className="tnum w-full rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-center text-2xl font-bold tracking-[0.35em] uppercase text-stone-100 outline-none transition placeholder:text-stone-600 focus:border-amber-500/40"
               value={joinCode}
               maxLength={6}
               onChange={(e) => setJoinCode(e.target.value)}
@@ -181,7 +186,7 @@ export default function Lobby({ playerId, onEnterRoom }: Props) {
             />
           </div>
           <button
-            className="w-full rounded-2xl bg-gradient-to-b from-emerald-500 to-emerald-700 py-4 text-lg font-black shadow-lg shadow-emerald-900/50 transition active:scale-[0.98] disabled:opacity-50"
+            className="btn-primary w-full rounded-2xl py-4 text-lg font-black text-white disabled:opacity-50"
             disabled={busy}
             onClick={handleJoin}
           >

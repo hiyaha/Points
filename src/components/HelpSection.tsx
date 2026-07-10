@@ -57,7 +57,7 @@ export function HelpTerms() {
       {TERMS.map((t) => (
         <div key={t.term}>
           <p className="text-sm font-bold text-amber-400">{t.term}</p>
-          <p className="text-xs leading-relaxed text-slate-400">{t.desc}</p>
+          <p className="text-xs leading-relaxed text-stone-400">{t.desc}</p>
         </div>
       ))}
     </div>
@@ -68,14 +68,14 @@ export default function HelpSection() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-slate-950/40">
+    <div className="rounded-2xl border border-amber-500/10 bg-stone-950/40">
       <button
-        className="flex w-full items-center justify-between px-4 py-3 text-sm font-bold text-slate-300 transition active:scale-[0.99]"
+        className="flex w-full items-center justify-between px-4 py-3 text-sm font-bold text-stone-300 transition active:scale-[0.99]"
         onClick={() => setOpen(!open)}
       >
         <span>📖 ポーカー用語ガイド</span>
         <span
-          className={`text-xs text-slate-500 transition-transform ${open ? "rotate-180" : ""}`}
+          className={`text-xs text-stone-500 transition-transform ${open ? "rotate-180" : ""}`}
         >
           ▼
         </span>

@@ -57,11 +57,11 @@ export default function App() {
   if (!isConfigured) return <SetupScreen />;
 
   return (
-    <div className="bg-app min-h-screen text-slate-100">
+    <div className="bg-app min-h-screen text-stone-100">
       <SoundToggles />
       <button
         aria-label="ヘルプ"
-        className="fixed left-3 top-3 z-50 flex h-9 w-9 items-center justify-center rounded-full border border-amber-500/50 bg-amber-900/60 text-base backdrop-blur transition active:scale-90"
+        className="fixed left-3 top-3 z-50 flex h-9 w-9 items-center justify-center rounded-full border border-amber-500/30 bg-amber-900/50 text-sm backdrop-blur-md shadow-[0_0_8px_rgba(245,158,11,0.15)] transition active:scale-90"
         onClick={() => setShowHelp(true)}
       >
         📖

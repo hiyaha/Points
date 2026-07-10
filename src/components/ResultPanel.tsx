@@ -30,7 +30,7 @@ export default function ResultPanel({ room, playerId, onError }: Props) {
 
   return (
     <div className="panel animate-fade-up space-y-4 rounded-2xl p-4">
-      <h2 className="text-center text-lg font-black">
+      <h2 className="text-center text-lg font-black text-stone-100">
         <span className="animate-trophy mr-1">🏆</span> ハンド結果
       </h2>
       <ul className="space-y-2">
@@ -39,7 +39,9 @@ export default function ResultPanel({ room, playerId, onError }: Props) {
             key={r.playerId}
             className="animate-fade-up flex items-center justify-between rounded-xl border border-amber-500/20 bg-gradient-to-r from-amber-950/40 to-transparent px-4 py-2.5"
           >
-            <span className="font-bold">{room.players[r.playerId]?.name}</span>
+            <span className="font-bold text-stone-100">
+              {room.players[r.playerId]?.name}
+            </span>
             <span className="text-gold tnum text-lg font-black">
               +{r.amount}
             </span>
@@ -50,8 +52,8 @@ export default function ResultPanel({ room, playerId, onError }: Props) {
       {isHost && (
         <div className="space-y-3">
           {busted.length > 0 && (
-            <div className="rounded-2xl bg-slate-950/50 p-3">
-              <p className="mb-2 text-sm text-slate-300">
+            <div className="rounded-2xl bg-stone-950/50 p-3">
+              <p className="mb-2 text-sm text-stone-300">
                 バーストしたプレイヤー:
               </p>
               {busted.map((id) => (
@@ -59,9 +61,11 @@ export default function ResultPanel({ room, playerId, onError }: Props) {
                   key={id}
                   className="flex items-center justify-between py-1"
                 >
-                  <span>{room.players[id]?.name}</span>
+                  <span className="text-stone-200">
+                    {room.players[id]?.name}
+                  </span>
                   <button
-                    className="tnum rounded-xl bg-slate-800 px-3 py-1.5 text-sm font-bold transition active:scale-95 disabled:opacity-50"
+                    className="tnum rounded-xl border border-white/10 bg-stone-800 px-3 py-1.5 text-sm font-bold text-stone-200 transition active:scale-95 disabled:opacity-50"
                     disabled={busy}
                     onClick={() => run(() => sendRebuy(room.code, playerId, id))}
                   >
@@ -73,23 +77,27 @@ export default function ResultPanel({ room, playerId, onError }: Props) {
           )}
 
           {showSettings ? (
-            <div className="animate-fade-up space-y-2 rounded-2xl bg-slate-950/50 p-3">
+            <div className="animate-fade-up space-y-2 rounded-2xl bg-stone-950/50 p-3">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-1 block text-xs text-slate-400">SB</label>
+                  <label className="mb-1 block text-xs text-stone-400">
+                    SB
+                  </label>
                   <input
                     type="number"
-                    className="tnum w-full rounded-xl border border-white/10 bg-slate-900 px-2 py-2 outline-none focus:border-emerald-500/60"
+                    className="tnum w-full rounded-xl border border-white/10 bg-stone-900 px-2 py-2 text-stone-100 outline-none focus:border-emerald-500/60"
                     value={sb}
                     min={1}
                     onChange={(e) => setSb(Number(e.target.value))}
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs text-slate-400">BB</label>
+                  <label className="mb-1 block text-xs text-stone-400">
+                    BB
+                  </label>
                   <input
                     type="number"
-                    className="tnum w-full rounded-xl border border-white/10 bg-slate-900 px-2 py-2 outline-none focus:border-emerald-500/60"
+                    className="tnum w-full rounded-xl border border-white/10 bg-stone-900 px-2 py-2 text-stone-100 outline-none focus:border-emerald-500/60"
                     value={bb}
                     min={1}
                     onChange={(e) => setBb(Number(e.target.value))}
@@ -98,13 +106,13 @@ export default function ResultPanel({ room, playerId, onError }: Props) {
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <button
-                  className="rounded-xl bg-slate-800 py-2.5 text-sm font-bold transition active:scale-95"
+                  className="rounded-xl border border-white/10 bg-stone-800 py-2.5 text-sm font-bold text-stone-200 transition active:scale-95"
                   onClick={() => setShowSettings(false)}
                 >
                   閉じる
                 </button>
                 <button
-                  className="rounded-xl bg-gradient-to-b from-emerald-600 to-emerald-800 py-2.5 text-sm font-bold transition active:scale-95 disabled:opacity-50"
+                  className="btn-primary rounded-xl py-2.5 text-sm font-bold text-white transition active:scale-95 disabled:opacity-50"
                   disabled={busy}
                   onClick={() =>
                     run(async () => {
@@ -125,7 +133,7 @@ export default function ResultPanel({ room, playerId, onError }: Props) {
             </div>
           ) : (
             <button
-              className="w-full rounded-xl border border-white/10 py-2.5 text-sm text-slate-300 transition active:scale-[0.98]"
+              className="w-full rounded-xl border border-white/10 py-2.5 text-sm text-stone-300 transition active:scale-[0.98]"
               onClick={() => setShowSettings(true)}
             >
               ⚙️ ブラインドを変更
@@ -133,7 +141,7 @@ export default function ResultPanel({ room, playerId, onError }: Props) {
           )}
 
           <button
-            className="w-full rounded-2xl bg-gradient-to-b from-emerald-500 to-emerald-700 py-4 text-lg font-black shadow-lg shadow-emerald-900/50 transition active:scale-[0.98] disabled:opacity-50"
+            className="btn-primary w-full rounded-2xl py-4 text-lg font-black text-white shadow-lg transition active:scale-[0.98] disabled:opacity-50"
             disabled={busy}
             onClick={() => run(() => sendNextHand(room.code, playerId))}
           >
@@ -143,7 +151,7 @@ export default function ResultPanel({ room, playerId, onError }: Props) {
       )}
 
       {!isHost && (
-        <p className="animate-bounce-soft text-center text-sm text-slate-400">
+        <p className="animate-bounce-soft text-center text-sm text-stone-400">
           ホストが次のハンドを開始するのを待っています...
         </p>
       )}

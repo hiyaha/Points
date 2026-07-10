@@ -41,26 +41,28 @@ export default function GameOverPanel({
     <div className="panel animate-fade-up space-y-5 rounded-2xl p-5">
       <div className="text-center">
         <p className="text-4xl">👑</p>
-        <h2 className="mt-2 text-2xl font-black text-amber-400">ゲーム終了!</h2>
-        <p className="mt-1 text-sm text-slate-400">
+        <h2 className="mt-2 text-2xl font-black text-amber-400">
+          ゲーム終了!
+        </h2>
+        <p className="mt-1 text-sm text-stone-400">
           全てのチップが1人に集まりました
         </p>
       </div>
 
-      <div className="flex flex-col items-center gap-2 rounded-2xl bg-gradient-to-b from-amber-950/60 to-transparent py-5">
+      <div className="flex flex-col items-center gap-2 rounded-2xl border border-amber-500/20 bg-gradient-to-b from-amber-950/60 to-transparent py-5">
         <span
-          className="flex h-16 w-16 items-center justify-center rounded-full text-2xl font-black shadow-lg"
+          className="flex h-16 w-16 items-center justify-center rounded-full text-2xl font-black shadow-xl ring-2 ring-amber-400/50"
           style={{ background: avatarGradient(winnerId) }}
         >
           {winner?.name?.charAt(0)}
         </span>
-        <p className="text-xl font-black">{winner?.name}</p>
+        <p className="text-xl font-black text-stone-100">{winner?.name}</p>
         <p className="text-gold tnum text-2xl font-black">{winner?.chips}</p>
-        <p className="text-xs text-slate-400">チップ獲得</p>
+        <p className="text-xs text-stone-400">チップ獲得</p>
       </div>
 
       <div className="space-y-1.5">
-        <p className="text-sm font-bold text-slate-300">最終順位</p>
+        <p className="text-sm font-bold text-stone-300">最終順位</p>
         {ranking.map((id, i) => {
           const p = room.players[id];
           if (!p) return null;
@@ -70,8 +72,8 @@ export default function GameOverPanel({
               key={id}
               className={`flex items-center gap-3 rounded-xl px-3 py-2 ${
                 i === 0
-                  ? "bg-amber-950/40 border border-amber-500/20"
-                  : "bg-slate-950/40"
+                  ? "border border-amber-500/20 bg-amber-950/40"
+                  : "bg-stone-950/40"
               }`}
             >
               <span className="w-6 text-center text-sm">
@@ -83,23 +85,25 @@ export default function GameOverPanel({
               >
                 {p.name.charAt(0)}
               </span>
-              <span className="flex-1 truncate font-medium">{p.name}</span>
-              <span className="tnum text-sm text-slate-400">{p.chips}</span>
+              <span className="flex-1 truncate font-medium text-stone-200">
+                {p.name}
+              </span>
+              <span className="tnum text-sm text-stone-400">{p.chips}</span>
             </div>
           );
         })}
       </div>
 
       {isHost && busted.length > 0 && (
-        <div className="space-y-2 rounded-2xl bg-slate-950/50 p-3">
-          <p className="text-sm text-slate-300">
+        <div className="space-y-2 rounded-2xl bg-stone-950/50 p-3">
+          <p className="text-sm text-stone-300">
             チップを追加して続けることもできます:
           </p>
           {busted.map((id) => (
             <div key={id} className="flex items-center justify-between py-1">
-              <span>{room.players[id]?.name}</span>
+              <span className="text-stone-200">{room.players[id]?.name}</span>
               <button
-                className="tnum rounded-xl bg-slate-800 px-3 py-1.5 text-sm font-bold transition active:scale-95 disabled:opacity-50"
+                className="tnum rounded-xl border border-white/10 bg-stone-800 px-3 py-1.5 text-sm font-bold text-stone-200 transition active:scale-95 disabled:opacity-50"
                 disabled={busy}
                 onClick={() => handleRebuy(id)}
               >
@@ -111,7 +115,7 @@ export default function GameOverPanel({
       )}
 
       <button
-        className="w-full rounded-xl border border-white/10 py-3 text-sm text-slate-400 transition active:scale-[0.98]"
+        className="w-full rounded-xl border border-white/10 py-3 text-sm text-stone-400 transition active:scale-[0.98]"
         onClick={onLeave}
       >
         ロビーに戻る

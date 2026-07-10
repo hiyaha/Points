@@ -53,15 +53,15 @@ function previewPositions(order: string[], n: number): Record<string, string> {
 }
 
 const POS_COLORS: Record<string, string> = {
-  BTN: "bg-amber-500 text-slate-950",
-  "BTN / SB": "bg-amber-500 text-slate-950",
+  BTN: "bg-amber-500 text-stone-950",
+  "BTN / SB": "bg-amber-500 text-stone-950",
   SB: "bg-sky-600",
   BB: "bg-indigo-600",
   UTG: "bg-rose-600",
   "UTG+1": "bg-rose-700",
   CO: "bg-purple-600",
   HJ: "bg-purple-700",
-  MP: "bg-slate-600",
+  MP: "bg-stone-600",
 };
 
 export default function WaitingRoom({ room, playerId, onLeave }: Props) {
@@ -110,7 +110,7 @@ export default function WaitingRoom({ room, playerId, onLeave }: Props) {
   return (
     <div className="animate-fade-up space-y-6 pt-6">
       <header className="text-center">
-        <p className="text-sm text-slate-400">ルームコード</p>
+        <p className="text-sm text-stone-400">ルームコード</p>
         <button
           className="panel mx-auto mt-2 block rounded-2xl px-8 py-4 transition active:scale-[0.97]"
           onClick={handleCopy}
@@ -118,29 +118,29 @@ export default function WaitingRoom({ room, playerId, onLeave }: Props) {
           <span className="text-gold tnum text-4xl font-black tracking-[0.3em]">
             {room.code}
           </span>
-          <span className="mt-1 block text-xs text-slate-400">
+          <span className="mt-1 block text-xs text-stone-400">
             {copied ? "コピーしました ✓" : "タップしてコピー"}
           </span>
         </button>
-        <p className="mt-3 text-sm text-slate-400">
+        <p className="mt-3 text-sm text-stone-400">
           このコードを友人に共有して参加してもらってください
         </p>
       </header>
 
       <div className="panel rounded-2xl p-4">
-        <h2 className="mb-1 font-bold">
+        <h2 className="mb-1 font-bold text-stone-100">
           席順
           <span className="ml-2 rounded-full bg-emerald-900/70 px-2 py-0.5 text-xs text-emerald-300">
             {n}人
           </span>
         </h2>
         {isHost && n >= 2 && (
-          <p className="mb-3 text-xs text-slate-500">
+          <p className="mb-3 text-xs text-stone-500">
             実際の着席順に合わせて並べ替えてください(▲▼ボタンで移動)
           </p>
         )}
         {!isHost && n >= 2 && (
-          <p className="mb-3 text-xs text-slate-500">
+          <p className="mb-3 text-xs text-stone-500">
             ホストが席順を設定しています
           </p>
         )}
@@ -148,9 +148,9 @@ export default function WaitingRoom({ room, playerId, onLeave }: Props) {
           {order.map((id, i) => (
             <li
               key={id}
-              className="animate-fade-up flex items-center gap-2 rounded-xl bg-slate-950/40 px-3 py-2"
+              className="animate-fade-up flex items-center gap-2 rounded-xl bg-stone-950/40 px-3 py-2"
             >
-              <span className="w-5 text-center text-xs font-bold text-slate-500">
+              <span className="w-5 text-center text-xs font-bold text-stone-500">
                 {i + 1}
               </span>
               <span
@@ -159,12 +159,12 @@ export default function WaitingRoom({ room, playerId, onLeave }: Props) {
               >
                 {room.players[id]?.name?.charAt(0) ?? "?"}
               </span>
-              <span className="min-w-0 flex-1 truncate font-medium">
+              <span className="min-w-0 flex-1 truncate font-medium text-stone-200">
                 {room.players[id]?.name}
               </span>
               {positions[id] && (
                 <span
-                  className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${POS_COLORS[positions[id]] ?? "bg-slate-600"}`}
+                  className={`rounded-full px-2 py-0.5 text-[10px] font-bold text-white ${POS_COLORS[positions[id]] ?? "bg-stone-600"}`}
                 >
                   {positions[id]}
                 </span>
@@ -182,14 +182,14 @@ export default function WaitingRoom({ room, playerId, onLeave }: Props) {
               {isHost && (
                 <span className="flex flex-col gap-0.5">
                   <button
-                    className="flex h-5 w-5 items-center justify-center rounded bg-slate-800 text-[10px] text-slate-400 transition active:scale-90 disabled:opacity-20"
+                    className="flex h-5 w-5 items-center justify-center rounded bg-stone-800 text-[10px] text-stone-400 transition active:scale-90 disabled:opacity-20"
                     disabled={busy || i === 0}
                     onClick={() => movePlayer(i, -1)}
                   >
                     ▲
                   </button>
                   <button
-                    className="flex h-5 w-5 items-center justify-center rounded bg-slate-800 text-[10px] text-slate-400 transition active:scale-90 disabled:opacity-20"
+                    className="flex h-5 w-5 items-center justify-center rounded bg-stone-800 text-[10px] text-stone-400 transition active:scale-90 disabled:opacity-20"
                     disabled={busy || i === n - 1}
                     onClick={() => movePlayer(i, 1)}
                   >
@@ -201,7 +201,7 @@ export default function WaitingRoom({ room, playerId, onLeave }: Props) {
           ))}
         </ul>
         {n >= 2 && (
-          <p className="mt-3 rounded-xl bg-slate-950/50 px-3 py-2 text-xs leading-relaxed text-slate-500">
+          <p className="mt-3 rounded-xl bg-stone-950/50 px-3 py-2 text-xs leading-relaxed text-stone-500">
             最初のハンドは席順1番目が BTN(ボタン) になります。以降、毎ハンド時計回りに移動します。プリフロップでは UTG(BBの左隣)から行動します。
           </p>
         )}
@@ -209,12 +209,14 @@ export default function WaitingRoom({ room, playerId, onLeave }: Props) {
 
       <div className="panel flex justify-around rounded-2xl p-4 text-center text-sm">
         <div>
-          <p className="text-xs text-slate-400">初期チップ</p>
-          <p className="tnum mt-0.5 font-bold">{room.settings.initialChips}</p>
+          <p className="text-xs text-stone-400">初期チップ</p>
+          <p className="tnum mt-0.5 font-bold text-stone-100">
+            {room.settings.initialChips}
+          </p>
         </div>
         <div>
-          <p className="text-xs text-slate-400">SB / BB</p>
-          <p className="tnum mt-0.5 font-bold">
+          <p className="text-xs text-stone-400">SB / BB</p>
+          <p className="tnum mt-0.5 font-bold text-stone-100">
             {room.settings.smallBlind} / {room.settings.bigBlind}
           </p>
         </div>
@@ -223,7 +225,7 @@ export default function WaitingRoom({ room, playerId, onLeave }: Props) {
       {isHost ? (
         <div className="space-y-3">
           <button
-            className="w-full rounded-2xl bg-gradient-to-b from-emerald-500 to-emerald-700 py-4 text-lg font-black shadow-lg shadow-emerald-900/50 transition active:scale-[0.98] disabled:opacity-50"
+            className="btn-primary w-full rounded-2xl py-4 text-lg font-black text-white shadow-lg transition active:scale-[0.98] disabled:opacity-50"
             disabled={busy || n < 2}
             onClick={handleStart}
           >
@@ -237,14 +239,17 @@ export default function WaitingRoom({ room, playerId, onLeave }: Props) {
           </button>
         </div>
       ) : (
-        <p className="animate-bounce-soft text-center text-slate-400">
+        <p className="animate-bounce-soft text-center text-stone-400">
           ホストの開始を待っています...
         </p>
       )}
 
       <HelpSection />
 
-      <button className="w-full py-2 text-sm text-slate-500" onClick={onLeave}>
+      <button
+        className="w-full py-2 text-sm text-stone-500"
+        onClick={onLeave}
+      >
         退出する(データは残ります)
       </button>
 

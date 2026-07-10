@@ -22,15 +22,15 @@ interface Props {
 
 function seatPositions(
   count: number,
-): { x: number; y: number; align: string }[] {
+): { x: number; y: number }[] {
   const RX = 46;
   const RY = 42;
   return Array.from({ length: count }, (_, i) => {
     const t = i / count;
-    const x = 50 + RX * Math.sin(2 * Math.PI * t);
-    const y = 50 + RY * Math.cos(2 * Math.PI * t);
-    const align = x < 35 ? "right" : x > 65 ? "left" : "center";
-    return { x, y, align };
+    return {
+      x: 50 + RX * Math.sin(2 * Math.PI * t),
+      y: 50 + RY * Math.cos(2 * Math.PI * t),
+    };
   });
 }
 
@@ -65,7 +65,7 @@ export default function GameTable({ room, playerId, onLeave }: Props) {
 
   if (!hand) {
     return (
-      <p className="py-20 text-center text-slate-400">
+      <p className="py-20 text-center text-stone-500">
         ハンドの開始を待っています...
       </p>
     );
@@ -78,7 +78,6 @@ export default function GameTable({ room, playerId, onLeave }: Props) {
   );
   const positions = getPositions(hand);
 
-  // 自分を手前(index 0 = テーブル下部)に回転
   const myIdx = displayOrder.indexOf(playerId);
   const rotated =
     myIdx >= 0
@@ -89,13 +88,16 @@ export default function GameTable({ room, playerId, onLeave }: Props) {
   return (
     <div className="space-y-3 pb-44">
       <header className="flex items-center justify-between pr-24">
-        <div className="flex items-center gap-2 text-sm text-slate-400">
-          <span className="panel tnum rounded-lg px-2.5 py-1 font-bold tracking-widest">
+        <div className="flex items-center gap-2 text-sm text-stone-500">
+          <span className="panel tnum rounded-lg px-2.5 py-1 font-bold tracking-widest text-stone-300">
             {room.code}
           </span>
           <span className="tnum">ハンド #{hand.handNumber}</span>
         </div>
-        <button className="text-sm text-slate-500" onClick={onLeave}>
+        <button
+          className="rounded-lg border border-white/5 bg-white/5 px-3 py-1 text-xs text-stone-500 transition active:scale-95"
+          onClick={onLeave}
+        >
           退出
         </button>
       </header>
@@ -106,24 +108,24 @@ export default function GameTable({ room, playerId, onLeave }: Props) {
         style={{ paddingBottom: "90%" }}
       >
         <div className="absolute inset-0">
-          {/* フェルト(中央の楕円テーブル) */}
-          <div className="felt absolute left-[15%] right-[15%] top-[20%] bottom-[20%] rounded-[50%] border border-emerald-950/80">
+          {/* フェルト */}
+          <div className="felt absolute bottom-[20%] left-[15%] right-[15%] top-[20%] rounded-[50%]">
             <div className="flex h-full flex-col items-center justify-center text-center">
-              <p className="text-[10px] font-bold tracking-widest text-emerald-300/90 uppercase">
+              <p className="text-[10px] font-bold tracking-widest uppercase text-emerald-300/80">
                 {PHASE_LABELS[hand.phase]}
               </p>
-              <p className="text-3xl font-black drop-shadow-lg">
+              <p className="mt-0.5 text-3xl font-black drop-shadow-lg">
                 <span className="text-gold tnum">{totalPot(hand)}</span>
               </p>
-              <p className="text-[10px] font-bold tracking-wider text-emerald-200/70">
+              <p className="text-[10px] font-bold tracking-wider text-emerald-200/60">
                 POT
               </p>
               {PHASE_INSTRUCTIONS[hand.phase] && (
-                <p className="mx-3 mt-2 rounded-full bg-black/25 px-3 py-1 text-[10px] leading-tight text-emerald-100/90">
+                <p className="mx-3 mt-2 rounded-full bg-black/30 px-3 py-1 text-[10px] leading-tight text-emerald-100/80">
                   🃏 {PHASE_INSTRUCTIONS[hand.phase]}
                 </p>
               )}
-              <p className="mt-1 text-[10px] text-emerald-200/50">
+              <p className="mt-1 text-[10px] text-emerald-200/40">
                 SB {room.settings.smallBlind} / BB {room.settings.bigBlind}
               </p>
             </div>
@@ -149,18 +151,18 @@ export default function GameTable({ room, playerId, onLeave }: Props) {
               >
                 <div
                   className={`flex flex-col items-center transition-all duration-300 ${
-                    folded ? "opacity-30 saturate-0" : ""
+                    folded ? "opacity-25 saturate-0" : ""
                   }`}
                 >
                   {/* アバター */}
                   <div className="relative">
                     <span
-                      className={`flex h-11 w-11 items-center justify-center rounded-full text-sm font-black shadow-lg ring-2 ${
+                      className={`flex h-12 w-12 items-center justify-center rounded-full text-sm font-black shadow-xl ring-2 transition-shadow ${
                         isActing
-                          ? "animate-glow ring-amber-400"
+                          ? "animate-glow ring-amber-400 shadow-amber-500/30"
                           : isMe
-                            ? "ring-sky-400"
-                            : "ring-transparent"
+                            ? "ring-sky-400/70 shadow-sky-500/20"
+                            : "ring-white/10"
                       }`}
                       style={{ background: avatarGradient(id) }}
                     >
@@ -168,9 +170,9 @@ export default function GameTable({ room, playerId, onLeave }: Props) {
                     </span>
                     {pos && (
                       <span
-                        className={`absolute -right-2 -top-1 rounded-full px-1 py-0.5 text-[8px] font-black leading-none ${
+                        className={`absolute -right-2.5 -top-1 rounded-full px-1.5 py-0.5 text-[8px] font-black leading-none shadow-md ${
                           pos === "BTN"
-                            ? "border border-amber-400 bg-amber-500 text-slate-950"
+                            ? "border border-amber-400 bg-amber-500 text-stone-950"
                             : positionStyle(pos)
                         } ${pos !== "BTN" ? "text-white" : ""}`}
                       >
@@ -181,31 +183,33 @@ export default function GameTable({ room, playerId, onLeave }: Props) {
 
                   {/* 名前 */}
                   <p
-                    className={`mt-0.5 max-w-[4.5rem] truncate text-center text-[11px] font-bold ${
-                      isMe ? "text-sky-300" : "text-slate-200"
+                    className={`mt-0.5 max-w-[5rem] truncate text-center text-[11px] font-bold ${
+                      isMe ? "text-sky-300" : "text-stone-200"
                     }`}
                   >
                     {isMe ? "あなた" : p.name}
                   </p>
 
                   {/* チップ */}
-                  <p className="tnum text-xs font-black">{p.chips}</p>
+                  <p className="tnum text-xs font-black text-stone-100">
+                    {p.chips}
+                  </p>
 
-                  {/* ステータス */}
+                  {/* ベット/ステータス */}
                   <p className="h-4 text-center text-[10px]">
                     {folded ? (
-                      <span className="text-slate-500">フォールド</span>
+                      <span className="text-stone-600">フォールド</span>
                     ) : allIn ? (
-                      <span className="font-bold text-rose-400">
+                      <span className="font-black text-rose-400 drop-shadow-[0_0_4px_rgba(244,63,94,0.4)]">
                         ALL IN
                       </span>
                     ) : bet > 0 ? (
-                      <span className="tnum text-emerald-300">
+                      <span className="tnum font-bold text-emerald-300">
                         <span className="chip-icon mr-0.5" />
                         {bet}
                       </span>
                     ) : isActing ? (
-                      <span className="animate-bounce-soft inline-block text-amber-300">
+                      <span className="animate-bounce-soft inline-block text-amber-400">
                         考え中
                       </span>
                     ) : null}
@@ -219,12 +223,15 @@ export default function GameTable({ room, playerId, onLeave }: Props) {
 
       {/* 観戦者 */}
       {spectators.length > 0 && (
-        <div className="flex flex-wrap justify-center gap-2 text-xs text-slate-500">
+        <div className="flex flex-wrap justify-center gap-2 text-xs text-stone-600">
           {spectators.map((id) => {
             const p = room.players[id];
             if (!p) return null;
             return (
-              <span key={id} className="rounded-full bg-slate-950/30 px-2 py-1">
+              <span
+                key={id}
+                className="rounded-full border border-white/5 bg-white/5 px-2.5 py-1"
+              >
                 {p.name} ({p.chips > 0 ? "次ハンドから" : "バースト"})
               </span>
             );
@@ -251,13 +258,13 @@ export default function GameTable({ room, playerId, onLeave }: Props) {
       )}
 
       {hand.actingId && hand.actingId !== playerId && (
-        <p className="text-center text-sm text-slate-400">
+        <p className="text-center text-sm text-stone-500">
           {room.players[hand.actingId]?.name} さんの番です
         </p>
       )}
 
       {!isHost && hand.phase === "showdown" && (
-        <p className="animate-bounce-soft text-center text-sm text-slate-400">
+        <p className="animate-bounce-soft text-center text-sm text-stone-500">
           ホストが勝者を選択しています...
         </p>
       )}

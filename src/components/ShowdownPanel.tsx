@@ -44,12 +44,12 @@ export default function ShowdownPanel({ room, playerId, onError }: Props) {
 
   return (
     <div className="panel animate-fade-up space-y-4 rounded-2xl p-4">
-      <h2 className="font-black">🏁 勝者を選択してください</h2>
-      <p className="text-xs text-slate-400">
+      <h2 className="font-black text-stone-100">🏁 勝者を選択してください</h2>
+      <p className="text-xs text-stone-400">
         引き分け(チョップ)の場合は複数人を選択するとポットが分割されます
       </p>
       {pots.map((pot, i) => (
-        <div key={i} className="rounded-2xl bg-slate-950/50 p-3">
+        <div key={i} className="rounded-2xl bg-stone-950/50 p-3">
           <p className="mb-2.5 text-sm font-black text-emerald-300">
             {pots.length === 1
               ? "ポット"
@@ -66,8 +66,8 @@ export default function ShowdownPanel({ room, playerId, onError }: Props) {
                   key={id}
                   className={`flex items-center gap-1.5 rounded-full py-1.5 pl-1.5 pr-3.5 text-sm font-bold transition active:scale-95 ${
                     selected
-                      ? "bg-gradient-to-b from-amber-400 to-amber-600 text-slate-950 shadow-lg shadow-amber-950/50"
-                      : "bg-slate-800 text-slate-300"
+                      ? "bg-gradient-to-b from-amber-400 to-amber-600 text-stone-950 shadow-lg shadow-amber-950/50"
+                      : "border border-white/10 bg-stone-800 text-stone-300"
                   }`}
                   onClick={() => toggle(i, id)}
                 >
@@ -86,7 +86,7 @@ export default function ShowdownPanel({ room, playerId, onError }: Props) {
         </div>
       ))}
       <button
-        className="w-full rounded-2xl bg-gradient-to-b from-emerald-500 to-emerald-700 py-4 font-black shadow-lg shadow-emerald-900/50 transition active:scale-[0.98] disabled:opacity-40"
+        className="btn-primary w-full rounded-2xl py-4 font-black text-white shadow-lg transition active:scale-[0.98] disabled:opacity-40"
         disabled={busy || !allSelected}
         onClick={handleDistribute}
       >

@@ -33,7 +33,7 @@ export default function ActionBar({ room, playerId, onError }: Props) {
   };
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-amber-500/20 bg-slate-950/95 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-[0_-8px_32px_rgba(0,0,0,0.6)] backdrop-blur-lg">
+    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-amber-500/20 bg-stone-950/95 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-[0_-8px_32px_rgba(0,0,0,0.6)] backdrop-blur-lg">
       <div className="mx-auto max-w-xl space-y-3">
         <p className="text-center text-sm font-black tracking-wide text-amber-400">
           ⭐ あなたの番です
@@ -58,31 +58,31 @@ export default function ActionBar({ room, playerId, onError }: Props) {
               />
               <input
                 type="number"
-                className="tnum w-24 rounded-xl border border-white/10 bg-slate-900 px-2 py-2 text-right font-bold outline-none focus:border-rose-500/60"
+                className="tnum w-24 rounded-xl border border-white/10 bg-stone-900 px-2 py-2 text-right font-bold text-stone-100 outline-none focus:border-rose-500/60"
                 min={minTarget}
                 max={maxTarget}
                 value={raiseTarget}
                 onChange={(e) => setRaiseTarget(Number(e.target.value))}
               />
             </div>
-            <p className="tnum text-center text-xs text-slate-400">
+            <p className="tnum text-center text-xs text-stone-400">
               このラウンドの合計ベット額(最低 {minTarget} / 最大 {maxTarget})
             </p>
             <div className="grid grid-cols-3 gap-2">
               <button
-                className="rounded-xl bg-slate-800 py-3 text-sm font-bold transition active:scale-95"
+                className="rounded-xl border border-white/10 bg-stone-800 py-3 text-sm font-bold text-stone-200 transition active:scale-95"
                 onClick={() => setShowRaise(false)}
               >
                 戻る
               </button>
               <button
-                className="rounded-xl bg-gradient-to-b from-purple-600 to-purple-800 py-3 text-sm font-bold shadow transition active:scale-95"
+                className="rounded-xl bg-gradient-to-b from-purple-500 to-purple-700 py-3 text-sm font-bold text-white shadow-lg shadow-purple-950/40 transition active:scale-95"
                 onClick={() => setRaiseTarget(maxTarget)}
               >
                 オールイン
               </button>
               <button
-                className="tnum rounded-xl bg-gradient-to-b from-rose-500 to-rose-700 py-3 font-black shadow-lg shadow-rose-950/50 transition active:scale-95 disabled:opacity-50"
+                className="tnum rounded-xl bg-gradient-to-b from-rose-500 to-rose-700 py-3 font-black text-white shadow-lg shadow-rose-950/50 transition active:scale-95 disabled:opacity-50"
                 disabled={
                   busy || raiseTarget < minTarget || raiseTarget > maxTarget
                 }
@@ -99,18 +99,18 @@ export default function ActionBar({ room, playerId, onError }: Props) {
         ) : (
           <div className="grid grid-cols-3 gap-2">
             <button
-              className="rounded-xl border border-white/10 bg-slate-800 py-3.5 font-bold shadow transition active:scale-95 disabled:opacity-50"
+              className="rounded-xl border border-white/10 bg-stone-800 py-3.5 font-bold text-stone-200 shadow transition active:scale-95 disabled:opacity-50"
               disabled={busy}
               onClick={() => act({ type: "fold" })}
             >
               フォールド
-              <span className="block text-[10px] font-normal text-slate-400">
+              <span className="block text-[10px] font-normal text-stone-400">
                 降りる
               </span>
             </button>
             {toCall > 0 ? (
               <button
-                className="rounded-xl bg-gradient-to-b from-sky-500 to-sky-700 py-3.5 font-black shadow-lg shadow-sky-950/50 transition active:scale-95 disabled:opacity-50"
+                className="rounded-xl bg-gradient-to-b from-sky-500 to-sky-700 py-3.5 font-black text-white shadow-lg shadow-sky-950/50 transition active:scale-95 disabled:opacity-50"
                 disabled={busy}
                 onClick={() => act({ type: "call" })}
               >
@@ -127,7 +127,7 @@ export default function ActionBar({ room, playerId, onError }: Props) {
               </button>
             ) : (
               <button
-                className="rounded-xl bg-gradient-to-b from-sky-500 to-sky-700 py-3.5 font-black shadow-lg shadow-sky-950/50 transition active:scale-95 disabled:opacity-50"
+                className="rounded-xl bg-gradient-to-b from-sky-500 to-sky-700 py-3.5 font-black text-white shadow-lg shadow-sky-950/50 transition active:scale-95 disabled:opacity-50"
                 disabled={busy}
                 onClick={() => act({ type: "check" })}
               >
@@ -139,7 +139,7 @@ export default function ActionBar({ room, playerId, onError }: Props) {
             )}
             {raiseAllowed ? (
               <button
-                className="rounded-xl bg-gradient-to-b from-rose-500 to-rose-700 py-3.5 font-black shadow-lg shadow-rose-950/50 transition active:scale-95 disabled:opacity-50"
+                className="rounded-xl bg-gradient-to-b from-rose-500 to-rose-700 py-3.5 font-black text-white shadow-lg shadow-rose-950/50 transition active:scale-95 disabled:opacity-50"
                 disabled={busy}
                 onClick={() => {
                   setRaiseTarget(minTarget);
@@ -153,7 +153,7 @@ export default function ActionBar({ room, playerId, onError }: Props) {
               </button>
             ) : (
               <button
-                className="rounded-xl bg-slate-900 py-3.5 text-xs text-slate-600"
+                className="rounded-xl bg-stone-900 py-3.5 text-xs text-stone-600"
                 disabled
               >
                 レイズ不可

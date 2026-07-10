@@ -7,19 +7,18 @@ import {
   unlock,
 } from "../lib/sound";
 
-/** 画面右上に常駐する BGM / 効果音の ON/OFF スイッチ */
 export default function SoundToggles() {
   const [bgmOn, setBgmOn] = useState(isBgmEnabled());
   const [seOn, setSeOn] = useState(isSeEnabled());
 
   return (
-    <div className="fixed right-3 top-3 z-50 flex gap-2">
+    <div className="fixed right-3 top-3 z-50 flex gap-1.5">
       <button
         aria-label={`BGM ${bgmOn ? "オフにする" : "オンにする"}`}
-        className={`flex h-9 w-9 items-center justify-center rounded-full border text-base backdrop-blur transition ${
+        className={`flex h-9 w-9 items-center justify-center rounded-full border text-sm backdrop-blur-md transition active:scale-90 ${
           bgmOn
-            ? "border-emerald-500/50 bg-emerald-900/60"
-            : "border-slate-600/50 bg-slate-900/60 opacity-50 grayscale"
+            ? "border-amber-500/30 bg-amber-900/50 shadow-[0_0_8px_rgba(245,158,11,0.15)]"
+            : "border-stone-700/50 bg-stone-900/60 opacity-50 grayscale"
         }`}
         onClick={() => {
           unlock();
@@ -32,10 +31,10 @@ export default function SoundToggles() {
       </button>
       <button
         aria-label={`効果音 ${seOn ? "オフにする" : "オンにする"}`}
-        className={`flex h-9 w-9 items-center justify-center rounded-full border text-base backdrop-blur transition ${
+        className={`flex h-9 w-9 items-center justify-center rounded-full border text-sm backdrop-blur-md transition active:scale-90 ${
           seOn
-            ? "border-emerald-500/50 bg-emerald-900/60"
-            : "border-slate-600/50 bg-slate-900/60 opacity-50 grayscale"
+            ? "border-amber-500/30 bg-amber-900/50 shadow-[0_0_8px_rgba(245,158,11,0.15)]"
+            : "border-stone-700/50 bg-stone-900/60 opacity-50 grayscale"
         }`}
         onClick={() => {
           unlock();

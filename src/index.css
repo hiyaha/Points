@@ -1,52 +1,96 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap");
 @import "tailwindcss";
 
-/* ---- 背景・テーブル ---- */
+:root {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   背景 — 深みのあるダーク、微かな暖色味
+   ============================================================ */
 
 .bg-app {
   background:
-    radial-gradient(1000px 600px at 50% -10%, rgba(16, 185, 129, 0.12), transparent),
-    radial-gradient(800px 500px at 100% 100%, rgba(56, 189, 248, 0.06), transparent),
-    linear-gradient(#020617, #0f172a);
+    radial-gradient(900px 500px at 50% -5%, rgba(180, 83, 9, 0.10), transparent),
+    radial-gradient(700px 400px at 0% 60%, rgba(120, 53, 15, 0.06), transparent),
+    radial-gradient(600px 400px at 100% 80%, rgba(30, 58, 138, 0.05), transparent),
+    linear-gradient(170deg, #0c0a09, #1c1917 40%, #0c0a09);
   background-attachment: fixed;
 }
 
+/* ============================================================
+   フェルト — 高級カジノテーブルの質感
+   ============================================================ */
+
 .felt {
   background:
-    radial-gradient(ellipse 120% 90% at 50% 30%, #15803d, #166534 55%, #14532d 80%, #052e16);
+    url("data:image/svg+xml,%3Csvg width='6' height='6' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='6' height='6' fill='%23166534' /%3E%3Crect x='0' y='0' width='3' height='3' fill='%23157030' opacity='0.15'/%3E%3Crect x='3' y='3' width='3' height='3' fill='%23157030' opacity='0.15'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 130% 100% at 50% 25%, #15803d, #166534 45%, #14532d 75%, #052e16);
   box-shadow:
-    inset 0 2px 24px rgba(0, 0, 0, 0.45),
-    0 8px 32px rgba(0, 0, 0, 0.5);
+    inset 0 0 60px rgba(0, 0, 0, 0.35),
+    inset 0 2px 0 rgba(255, 255, 255, 0.04),
+    0 4px 20px rgba(0, 0, 0, 0.4),
+    0 12px 48px rgba(0, 0, 0, 0.35);
+  border: 1.5px solid rgba(22, 101, 52, 0.6);
 }
+
+/* ============================================================
+   パネル — ガラスモーフィズム風カード
+   ============================================================ */
 
 .panel {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.065),
+    rgba(255, 255, 255, 0.025)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 6px 24px rgba(0, 0, 0, 0.4),
+    0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-/* ---- 金色のテキスト ---- */
+/* ============================================================
+   金色テキスト — 豪華なメタリックグラデーション
+   ============================================================ */
 
 .text-gold {
-  background: linear-gradient(180deg, #fde68a, #f59e0b 70%, #b45309);
+  background: linear-gradient(
+    175deg,
+    #fef3c7 0%,
+    #fbbf24 25%,
+    #f59e0b 50%,
+    #d97706 75%,
+    #b45309 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  filter: drop-shadow(0 1px 2px rgba(180, 83, 9, 0.3));
 }
 
-/* ---- ポーカーチップ風のバッジ ---- */
+/* ============================================================
+   ポーカーチップ風バッジ
+   ============================================================ */
 
 .chip-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.4rem;
-  height: 1.4rem;
+  min-width: 1.5rem;
+  height: 1.35rem;
+  padding: 0 0.25rem;
   border-radius: 9999px;
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   font-weight: 800;
-  border: 2px dashed rgba(255, 255, 255, 0.75);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  letter-spacing: 0.02em;
+  border: 2px dashed rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
   flex: none;
 }
 
@@ -62,69 +106,102 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-/* ---- アニメーション ---- */
+/* ============================================================
+   ボタン共通 — 高級感のある光沢
+   ============================================================ */
 
-@keyframes glow-pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.55);
-  }
-  50% {
-    box-shadow: 0 0 0 10px rgba(251, 191, 36, 0);
-  }
+.btn-primary {
+  background: linear-gradient(180deg, #059669, #047857 50%, #065f46);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.12) inset,
+    0 4px 12px rgba(5, 150, 105, 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: all 0.15s ease;
+}
+.btn-primary:active {
+  transform: scale(0.98);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.08) inset,
+    0 2px 6px rgba(5, 150, 105, 0.2);
 }
 
+/* ============================================================
+   装飾線 — セパレーター
+   ============================================================ */
+
+.divider-gold {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(251, 191, 36, 0.4) 30%,
+    rgba(245, 158, 11, 0.6) 50%,
+    rgba(251, 191, 36, 0.4) 70%,
+    transparent
+  );
+}
+
+/* ============================================================
+   アニメーション
+   ============================================================ */
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.5); }
+  50% { box-shadow: 0 0 12px 6px rgba(251, 191, 36, 0); }
+}
 .animate-glow {
   animation: glow-pulse 1.6s ease-in-out infinite;
 }
 
 @keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
 }
-
 .animate-fade-up {
-  animation: fade-up 0.35s ease-out both;
+  animation: fade-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @keyframes trophy-pop {
-  0% {
-    transform: scale(0) rotate(-20deg);
-  }
-  60% {
-    transform: scale(1.25) rotate(8deg);
-  }
-  100% {
-    transform: scale(1) rotate(0);
-  }
+  0% { transform: scale(0) rotate(-20deg); }
+  60% { transform: scale(1.25) rotate(8deg); }
+  100% { transform: scale(1) rotate(0); }
 }
-
 .animate-trophy {
   animation: trophy-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
   display: inline-block;
 }
 
 @keyframes bounce-soft {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-3px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
 }
-
 .animate-bounce-soft {
   animation: bounce-soft 1.2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.06) 40%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.06) 60%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
 }
 
 /* 数字はモノスペースで揃える */
 .tnum {
   font-variant-numeric: tabular-nums;
 }
+
+/* スクロールバーを控えめに */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
