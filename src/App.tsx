@@ -55,7 +55,7 @@ export default function App() {
   if (!isConfigured) return <SetupScreen />;
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100">
+    <div className="bg-app min-h-screen text-slate-100">
       <SoundToggles />
       <div className="mx-auto max-w-xl px-4 py-6">
         {!roomCode ? (

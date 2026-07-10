@@ -33,19 +33,24 @@ export default function ActionBar({ room, playerId, onError }: Props) {
   };
 
   return (
-    <div className="fixed inset-x-0 bottom-0 border-t border-slate-700 bg-slate-900/95 p-4 backdrop-blur">
+    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-amber-500/20 bg-slate-950/95 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-[0_-8px_32px_rgba(0,0,0,0.6)] backdrop-blur-lg">
       <div className="mx-auto max-w-xl space-y-3">
-        <p className="text-center text-sm font-bold text-amber-400">
-          あなたの番です
-          {toCall > 0 && ` — コールに ${callAmount} 必要`}
+        <p className="text-center text-sm font-black tracking-wide text-amber-400">
+          ⭐ あなたの番です
+          {toCall > 0 && (
+            <span className="tnum font-bold text-amber-200/90">
+              {" "}
+              — コールに {callAmount} 必要
+            </span>
+          )}
         </p>
 
         {showRaise ? (
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
+          <div className="animate-fade-up space-y-3">
+            <div className="flex items-center gap-3">
               <input
                 type="range"
-                className="flex-1"
+                className="flex-1 accent-rose-500"
                 min={minTarget}
                 max={maxTarget}
                 value={raiseTarget}
@@ -53,36 +58,38 @@ export default function ActionBar({ room, playerId, onError }: Props) {
               />
               <input
                 type="number"
-                className="w-24 rounded-lg border border-slate-600 bg-slate-800 px-2 py-1 text-right"
+                className="tnum w-24 rounded-xl border border-white/10 bg-slate-900 px-2 py-2 text-right font-bold outline-none focus:border-rose-500/60"
                 min={minTarget}
                 max={maxTarget}
                 value={raiseTarget}
                 onChange={(e) => setRaiseTarget(Number(e.target.value))}
               />
             </div>
-            <p className="text-center text-xs text-slate-400">
+            <p className="tnum text-center text-xs text-slate-400">
               このラウンドの合計ベット額(最低 {minTarget} / 最大 {maxTarget})
             </p>
             <div className="grid grid-cols-3 gap-2">
               <button
-                className="rounded-lg bg-slate-700 py-2 text-sm"
+                className="rounded-xl bg-slate-800 py-3 text-sm font-bold transition active:scale-95"
                 onClick={() => setShowRaise(false)}
               >
                 戻る
               </button>
               <button
-                className="rounded-lg bg-slate-700 py-2 text-sm"
+                className="rounded-xl bg-gradient-to-b from-purple-600 to-purple-800 py-3 text-sm font-bold shadow transition active:scale-95"
                 onClick={() => setRaiseTarget(maxTarget)}
               >
                 オールイン
               </button>
               <button
-                className="rounded-lg bg-rose-600 py-2 font-bold disabled:opacity-50"
-                disabled={busy || raiseTarget < minTarget || raiseTarget > maxTarget}
+                className="tnum rounded-xl bg-gradient-to-b from-rose-500 to-rose-700 py-3 font-black shadow-lg shadow-rose-950/50 transition active:scale-95 disabled:opacity-50"
+                disabled={
+                  busy || raiseTarget < minTarget || raiseTarget > maxTarget
+                }
                 onClick={() => act({ type: "raise", amount: raiseTarget })}
               >
                 {raiseTarget === maxTarget
-                  ? "オールイン"
+                  ? "オールイン!"
                   : hand.currentBet > 0
                     ? `${raiseTarget} にレイズ`
                     : `${raiseTarget} をベット`}
@@ -92,7 +99,7 @@ export default function ActionBar({ room, playerId, onError }: Props) {
         ) : (
           <div className="grid grid-cols-3 gap-2">
             <button
-              className="rounded-lg bg-slate-700 py-3 font-bold disabled:opacity-50"
+              className="rounded-xl border border-white/10 bg-slate-800 py-3.5 font-bold shadow transition active:scale-95 disabled:opacity-50"
               disabled={busy}
               onClick={() => act({ type: "fold" })}
             >
@@ -100,18 +107,20 @@ export default function ActionBar({ room, playerId, onError }: Props) {
             </button>
             {toCall > 0 ? (
               <button
-                className="rounded-lg bg-sky-600 py-3 font-bold disabled:opacity-50"
+                className="rounded-xl bg-gradient-to-b from-sky-500 to-sky-700 py-3.5 font-black shadow-lg shadow-sky-950/50 transition active:scale-95 disabled:opacity-50"
                 disabled={busy}
                 onClick={() => act({ type: "call" })}
               >
-                コール {callAmount}
+                <span className="tnum">コール {callAmount}</span>
                 {callAmount >= me.chips && (
-                  <span className="block text-xs font-normal">(オールイン)</span>
+                  <span className="block text-xs font-normal">
+                    (オールイン)
+                  </span>
                 )}
               </button>
             ) : (
               <button
-                className="rounded-lg bg-sky-600 py-3 font-bold disabled:opacity-50"
+                className="rounded-xl bg-gradient-to-b from-sky-500 to-sky-700 py-3.5 font-black shadow-lg shadow-sky-950/50 transition active:scale-95 disabled:opacity-50"
                 disabled={busy}
                 onClick={() => act({ type: "check" })}
               >
@@ -120,7 +129,7 @@ export default function ActionBar({ room, playerId, onError }: Props) {
             )}
             {raiseAllowed ? (
               <button
-                className="rounded-lg bg-rose-600 py-3 font-bold disabled:opacity-50"
+                className="rounded-xl bg-gradient-to-b from-rose-500 to-rose-700 py-3.5 font-black shadow-lg shadow-rose-950/50 transition active:scale-95 disabled:opacity-50"
                 disabled={busy}
                 onClick={() => {
                   setRaiseTarget(minTarget);
@@ -130,7 +139,10 @@ export default function ActionBar({ room, playerId, onError }: Props) {
                 {hand.currentBet > 0 ? "レイズ" : "ベット"}
               </button>
             ) : (
-              <button className="rounded-lg bg-slate-800 py-3 text-xs text-slate-500" disabled>
+              <button
+                className="rounded-xl bg-slate-900 py-3.5 text-xs text-slate-600"
+                disabled
+              >
                 レイズ不可
               </button>
             )}

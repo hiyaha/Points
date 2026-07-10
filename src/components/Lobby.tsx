@@ -64,18 +64,28 @@ export default function Lobby({ playerId, onEnterRoom }: Props) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="animate-fade-up space-y-6 pt-8">
       <header className="text-center">
-        <h1 className="text-2xl font-bold">♠ ポーカーチップカウンター</h1>
-        <p className="mt-1 text-sm text-slate-400">
+        <p className="mb-1 text-2xl tracking-[0.4em]">
+          <span className="text-slate-200">♠</span>
+          <span className="text-red-500">♥</span>
+          <span className="text-red-500">♦</span>
+          <span className="text-slate-200">♣</span>
+        </p>
+        <h1 className="text-gold text-3xl font-black tracking-wide">
+          ポーカーチップカウンター
+        </h1>
+        <p className="mt-2 text-sm text-slate-400">
           テキサスホールデム用のチップ管理アプリ
         </p>
       </header>
 
-      <div>
-        <label className="mb-1 block text-sm text-slate-300">あなたの名前</label>
+      <div className="panel rounded-2xl p-5">
+        <label className="mb-1.5 block text-sm font-medium text-slate-300">
+          あなたの名前
+        </label>
         <input
-          className="w-full rounded-lg border border-slate-600 bg-slate-800 px-3 py-2"
+          className="w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 py-3 outline-none transition focus:border-emerald-500/60 focus:ring-2 focus:ring-emerald-500/20"
           value={name}
           maxLength={12}
           onChange={(e) => setName(e.target.value)}
@@ -83,15 +93,23 @@ export default function Lobby({ playerId, onEnterRoom }: Props) {
         />
       </div>
 
-      <div className="flex overflow-hidden rounded-lg border border-slate-600">
+      <div className="flex overflow-hidden rounded-xl border border-white/10 bg-slate-950/40 p-1">
         <button
-          className={`flex-1 py-2 text-sm font-medium ${mode === "create" ? "bg-emerald-700" : "bg-slate-800 text-slate-400"}`}
+          className={`flex-1 rounded-lg py-2.5 text-sm font-bold transition ${
+            mode === "create"
+              ? "bg-gradient-to-b from-emerald-500 to-emerald-700 shadow-lg"
+              : "text-slate-400"
+          }`}
           onClick={() => setMode("create")}
         >
           ルームを作る
         </button>
         <button
-          className={`flex-1 py-2 text-sm font-medium ${mode === "join" ? "bg-emerald-700" : "bg-slate-800 text-slate-400"}`}
+          className={`flex-1 rounded-lg py-2.5 text-sm font-bold transition ${
+            mode === "join"
+              ? "bg-gradient-to-b from-emerald-500 to-emerald-700 shadow-lg"
+              : "text-slate-400"
+          }`}
           onClick={() => setMode("join")}
         >
           ルームに参加
@@ -99,13 +117,15 @@ export default function Lobby({ playerId, onEnterRoom }: Props) {
       </div>
 
       {mode === "create" ? (
-        <div className="space-y-4">
-          <div className="grid grid-cols-3 gap-3">
+        <div className="animate-fade-up space-y-4">
+          <div className="panel grid grid-cols-3 gap-3 rounded-2xl p-4">
             <div>
-              <label className="mb-1 block text-xs text-slate-400">初期チップ</label>
+              <label className="mb-1 block text-xs text-slate-400">
+                初期チップ
+              </label>
               <input
                 type="number"
-                className="w-full rounded-lg border border-slate-600 bg-slate-800 px-2 py-2"
+                className="tnum w-full rounded-xl border border-white/10 bg-slate-950/60 px-2 py-2.5 outline-none transition focus:border-emerald-500/60"
                 value={initialChips}
                 min={1}
                 onChange={(e) => setInitialChips(Number(e.target.value))}
@@ -115,7 +135,7 @@ export default function Lobby({ playerId, onEnterRoom }: Props) {
               <label className="mb-1 block text-xs text-slate-400">SB(小)</label>
               <input
                 type="number"
-                className="w-full rounded-lg border border-slate-600 bg-slate-800 px-2 py-2"
+                className="tnum w-full rounded-xl border border-white/10 bg-slate-950/60 px-2 py-2.5 outline-none transition focus:border-emerald-500/60"
                 value={smallBlind}
                 min={1}
                 onChange={(e) => setSmallBlind(Number(e.target.value))}
@@ -125,7 +145,7 @@ export default function Lobby({ playerId, onEnterRoom }: Props) {
               <label className="mb-1 block text-xs text-slate-400">BB(大)</label>
               <input
                 type="number"
-                className="w-full rounded-lg border border-slate-600 bg-slate-800 px-2 py-2"
+                className="tnum w-full rounded-xl border border-white/10 bg-slate-950/60 px-2 py-2.5 outline-none transition focus:border-emerald-500/60"
                 value={bigBlind}
                 min={1}
                 onChange={(e) => setBigBlind(Number(e.target.value))}
@@ -133,7 +153,7 @@ export default function Lobby({ playerId, onEnterRoom }: Props) {
             </div>
           </div>
           <button
-            className="w-full rounded-lg bg-emerald-600 py-3 font-bold disabled:opacity-50"
+            className="w-full rounded-2xl bg-gradient-to-b from-emerald-500 to-emerald-700 py-4 text-lg font-black shadow-lg shadow-emerald-900/50 transition active:scale-[0.98] disabled:opacity-50"
             disabled={busy}
             onClick={handleCreate}
           >
@@ -141,11 +161,13 @@ export default function Lobby({ playerId, onEnterRoom }: Props) {
           </button>
         </div>
       ) : (
-        <div className="space-y-4">
-          <div>
-            <label className="mb-1 block text-sm text-slate-300">ルームコード</label>
+        <div className="animate-fade-up space-y-4">
+          <div className="panel rounded-2xl p-4">
+            <label className="mb-1.5 block text-sm font-medium text-slate-300">
+              ルームコード
+            </label>
             <input
-              className="w-full rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-center text-xl tracking-[0.3em] uppercase"
+              className="tnum w-full rounded-xl border border-white/10 bg-slate-950/60 px-3 py-3 text-center text-2xl font-bold tracking-[0.35em] uppercase outline-none transition focus:border-emerald-500/60"
               value={joinCode}
               maxLength={6}
               onChange={(e) => setJoinCode(e.target.value)}
@@ -153,7 +175,7 @@ export default function Lobby({ playerId, onEnterRoom }: Props) {
             />
           </div>
           <button
-            className="w-full rounded-lg bg-emerald-600 py-3 font-bold disabled:opacity-50"
+            className="w-full rounded-2xl bg-gradient-to-b from-emerald-500 to-emerald-700 py-4 text-lg font-black shadow-lg shadow-emerald-900/50 transition active:scale-[0.98] disabled:opacity-50"
             disabled={busy}
             onClick={handleJoin}
           >
@@ -163,7 +185,9 @@ export default function Lobby({ playerId, onEnterRoom }: Props) {
       )}
 
       {error && (
-        <p className="rounded-lg bg-red-900/50 px-3 py-2 text-sm text-red-300">{error}</p>
+        <p className="animate-fade-up rounded-xl border border-red-500/30 bg-red-950/60 px-4 py-3 text-sm text-red-300">
+          {error}
+        </p>
       )}
     </div>
   );
